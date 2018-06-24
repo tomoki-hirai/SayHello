@@ -1,6 +1,15 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const fs = require('fs');
+const bodyParser = require('body-parser');
+
+const model = require('./model');
+const Volume = model.Volume;
+
+router.use(bodyParser.urlencoded({
+    extended: true
+}));
+router.use(bodyParser.json());
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -9,25 +18,16 @@ router.get('/', function(req, res, next) {
 
 // post
 router.post('/',function(req,res){
-  // console.log(req);
-  // res.send('ok')
-
-  let buffers = [];
-    let cnt = 0;
-
-    req.on('data', (chunk) => {
-        buffers.push(chunk);
-        console.log(++cnt);
-    });
-
-    req.on('end', () => {
-        console.log(`[done] Image upload`);
-        req.rawBody = Buffer.concat(buffers);
-        //書き込み
-        fs.writeFile('./data/img.mp3', req.rawBody, 'utf-8',(err) => {
-            if(err) return;
-            console.log(`[done] Image save`);
-        });
+    console.log(req.body)
+    console.log(req.body.name)
+    let doc = new Volume({"user":req.body.user,"volume":req.body.volume});
+    // ドキュメントの保存
+    doc.save(function(err) {
+        if(err) {
+            console.log(err);
+          } else {
+            console.log(req.body);
+          }
     });
     res.send('')
 })
