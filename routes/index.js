@@ -13,7 +13,7 @@ router.use(bodyParser.json());
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+    res.render('index', { title: 'Express' });
 });
 
 // post
@@ -31,5 +31,40 @@ router.post('/',function(req,res){
     });
     res.send('')
 })
+
+router.get('/ranking', function(req, res, next) {
+    // Volume.find({},{sort:{volume: 1},limit:3}, function(err, result) {
+    //     if (err) throw err;
+    //     console.log(result);
+    //     res.send(result)
+    //   });
+    var dt = new Date();
+    //年
+    var year = dt.getFullYear();
+    //月
+    //1月が0、12月が11。そのため+1をする。
+    var month = dt.getMonth()+1;
+    //日
+    var date = dt.getDate();
+    console.log(date)
+    Volume.find({})
+    .find({year:year})
+    .find({month:month})
+    .find({date:date})
+    .sort('-volume')
+    .limit(3)
+    .exec(function(err,result){
+    // let ranking = [
+    //     { first: result[0].user, second: result[1].user ,third:result[2].user}
+    //   ];
+    
+        // Since the request is for a JSON representation of the people, we
+        //  should JSON serialize them. The built-in JSON.stringify() function
+        //  does that.
+    // var rankingJSON = JSON.stringify(ranking);
+    console.log(result);
+    res.send(result)
+    });
+});
 
 module.exports = router;
