@@ -19,10 +19,10 @@ router.get('/', function(req, res, next) {
 // post
 router.post('/',function(req,res){
     console.log(req.body)
-    var dt = new Date();
-    var year = dt.getFullYear();
-    var month = dt.getMonth()+1;
-    var date = dt.getDate();
+    let dt = new Date();
+    let year = dt.getFullYear();
+    let month = dt.getMonth()+1;
+    let date = dt.getDate();
     let doc = new Volume({
     "user":req.body.user,
     "volume":req.body.volume,
@@ -42,6 +42,10 @@ router.post('/',function(req,res){
 })
 
 router.get('/ranking', function(req, res, next) {
+    let dt = new Date();
+    let year = dt.getFullYear();
+    let month = dt.getMonth()+1;
+    let date = dt.getDate();
     Volume.find({})
     .find({year:year})
     .find({month:month})
